@@ -14,6 +14,11 @@ import expressValidator from "express-validator";
 import bluebird from "bluebird";
 import { MONGODB_URI, SESSION_SECRET } from "./util/secrets";
 
+import webpackConfigs from '../webpack.config';
+import webpack from 'webpack';
+import middleware from 'webpack-dev-middleware';
+const compiler = webpack(webpackConfigs);
+
 const MongoStore = mongo(session);
 
 // Load environment variables from .env file, where API keys and passwords are configured
@@ -44,6 +49,11 @@ mongoose.connect(mongoUrl).then(
 app.set("port", process.env.PORT || 3000);
 app.set("views", path.join(__dirname, "../views"));
 app.set("view engine", "pug");
+app.use(
+  middleware(compiler, {
+    publicPath: webpackConfigs.output.path
+  })
+);
 app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
