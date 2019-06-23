@@ -31,6 +31,7 @@ export let postContact = (req: Request, res: Response) => {
   const errors = req.validationErrors();
 
   if (errors) {
+    console.log("asdfasdf");
     req.flash("errors", errors);
     return res.redirect("/contact");
   }

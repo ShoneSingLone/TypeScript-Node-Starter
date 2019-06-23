@@ -20,6 +20,7 @@ export let getApi = (req: Request, res: Response) => {
  * GET /api/facebook
  * Facebook API example.
  */
+
 export let getFacebook = (req: Request, res: Response, next: NextFunction) => {
   const token = req.user.tokens.find((token: any) => token.kind === "facebook");
   graph.setAccessToken(token.accessToken);

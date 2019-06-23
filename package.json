@@ -4,14 +4,14 @@
   "description": "A starting point for Node.js express apps with TypeScript",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Microsoft/TypeScript-Node-Starter"
+    "url": "https://github.com/Microsoft/TypeScript-pNode-Starter"
   },
   "author": "Bowden Kelly",
   "license": "MIT",
   "scripts": {
-    "start": "npm run serve",
+    "start": "npm run watch-ts",
+    "dev": "npm run watch-ts",
     "build": "npm run build-sass && npm run build-ts && npm run tslint && npm run copy-static-assets",
-    "serve": "node dist/server.js",
     "watch-node": "nodemon dist/server.js",
     "watch": "concurrently -k -p \"[{name}]\" -n \"Sass,TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-sass\" \"npm run watch-ts\" \"npm run watch-node\"",
     "test": "jest --forceExit --coverage --verbose",
@@ -84,6 +84,7 @@
     "jest": "^24.0.0",
     "node-sass": "^4.12.0",
     "nodemon": "^1.18.10",
+    "pm2": "^3.5.1",
     "shelljs": "^0.8.1",
     "supertest": "^3.0.0",
     "ts-jest": "^24.0.0",
