@@ -1,5 +1,6 @@
 import nodemailer from "nodemailer";
 import { Request, Response } from "express";
+import { check, validationResult } from "express-validator";
 
 const transporter = nodemailer.createTransport({
   service: "SendGrid",
@@ -13,7 +14,7 @@ const transporter = nodemailer.createTransport({
  * GET /contact
  * Contact form page.
  */
-export let getContact = (req: Request, res: Response) => {
+export const getContact = (req: Request, res: Response) => {
   res.render("contact", {
     title: "Contact"
   });
@@ -23,16 +24,15 @@ export let getContact = (req: Request, res: Response) => {
  * POST /contact
  * Send a contact form via Nodemailer.
  */
-export let postContact = (req: Request, res: Response) => {
-  req.assert("name", "Name cannot be blank").notEmpty();
-  req.assert("email", "Email is not valid").isEmail();
-  req.assert("message", "Message cannot be blank").notEmpty();
+export const postContact = (req: Request, res: Response) => {
+  check("name", "Name cannot be blank").not().isEmpty();
+  check("email", "Email is not valid").isEmail();
+  check("message", "Message cannot be blank").not().isEmpty();
 
-  const errors = req.validationErrors();
+  const errors = validationResult(req);
 
-  if (errors) {
-    console.log("asdfasdf");
-    req.flash("errors", errors);
+  if (!errors.isEmpty()) {
+    req.flash("errors", errors.array());
     return res.redirect("/contact");
   }
 

@@ -2,7 +2,6 @@ import express from "express";
 import compression from "compression";  // compresses requests
 import session from "express-session";
 import bodyParser from "body-parser";
-import logger from "./util/logger";
 import lusca from "lusca";
 import dotenv from "dotenv";
 import mongo from "connect-mongo";
@@ -10,25 +9,21 @@ import flash from "express-flash";
 import path from "path";
 import mongoose from "mongoose";
 import passport from "passport";
-import expressValidator from "express-validator";
 import bluebird from "bluebird";
 import { MONGODB_URI, SESSION_SECRET } from "./util/secrets";
-
-import webpackConfigs from '../webpack.config';
-import webpack from 'webpack';
-import middleware from 'webpack-dev-middleware';
-const compiler = webpack(webpackConfigs);
 
 const MongoStore = mongo(session);
 
 // Load environment variables from .env file, where API keys and passwords are configured
-dotenv.config({ path: ".env.example" });
+dotenv.config({ path: "../AAAConfigs/TypeScriptNodeStarter.configs" });
 
 // Controllers (route handlers)
 import * as homeController from "./controllers/home";
 import * as userController from "./controllers/user";
 import * as apiController from "./controllers/api";
 import * as contactController from "./controllers/contact";
+
+
 // API keys and Passport configuration
 import * as passportConfig from "./config/passport";
 
@@ -38,7 +33,8 @@ const app = express();
 // Connect to MongoDB
 const mongoUrl = MONGODB_URI;
 (<any>mongoose).Promise = bluebird;
-mongoose.connect(mongoUrl).then(
+
+mongoose.connect(mongoUrl, { useNewUrlParser: true }).then(
   () => { /** ready to use. The `mongoose.connect()` promise resolves to undefined. */ },
 ).catch(err => {
   console.log("MongoDB connection error. Please make sure MongoDB is running. " + err);
@@ -49,15 +45,9 @@ mongoose.connect(mongoUrl).then(
 app.set("port", process.env.PORT || 3000);
 app.set("views", path.join(__dirname, "../views"));
 app.set("view engine", "pug");
-app.use(
-  middleware(compiler, {
-    publicPath: webpackConfigs.output.path
-  })
-);
 app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(expressValidator());
 app.use(session({
   resave: true,
   saveUninitialized: true,

@@ -2,9 +2,9 @@ import logger from "./logger";
 import dotenv from "dotenv";
 import fs from "fs";
 
-if (fs.existsSync(".env")) {
-    logger.debug("Using .env file to supply config environment variables");
-    dotenv.config({ path: ".env" });
+if (fs.existsSync("../AAAConfigs/TypeScriptNodeStarter.configs")) {
+    logger.debug("Using ../AAAConfigs/TypeScriptNodeStarter.configs file to supply config environment variables");
+    dotenv.config({ path: "../AAAConfigs/TypeScriptNodeStarter.configs" });
 } else {
     logger.debug("Using .env.example file to supply config environment variables");
     dotenv.config({ path: ".env.example" });  // you can delete this after you create your own .env file!
@@ -21,6 +21,10 @@ if (!SESSION_SECRET) {
 }
 
 if (!MONGODB_URI) {
-    logger.error("No mongo connection string. Set MONGODB_URI environment variable.");
+    if (prod) {
+        logger.error("No mongo connection string. Set MONGODB_URI environment variable.");
+    } else {
+        logger.error("No mongo connection string. Set MONGODB_URI_LOCAL environment variable.");
+    }
     process.exit(1);
 }
