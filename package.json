@@ -9,7 +9,7 @@
   "author": "Bowden Kelly",
   "license": "MIT",
   "scripts": {
-    "start": "npm run serve",
+    "start": "npm run watch-debug",
     "build": "npm run build-sass && npm run build-ts && npm run tslint && npm run copy-static-assets",
     "serve": "node dist/server.js",
     "prod": "node dist/server.prod.js",
